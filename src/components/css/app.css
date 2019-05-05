@@ -1,0 +1,9 @@
+p {
+  font-size: 18px;
+}
+
+.ui.segment {
+  background: #EDE6E3 !important;
+  height: 100vh;
+  border-radius: 0 !important;
+}
