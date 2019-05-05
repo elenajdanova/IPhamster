@@ -1,3 +1,4 @@
+import styles from './css/fakeTerminal.css';
 import React from 'react';
 
 class FakeTerminal extends React.Component {
