@@ -2,11 +2,11 @@ import styles from './css/fakeTerminal.css';
 import React from 'react';
 
 let defaultOpts = {
-  welcome: "Welcome!",
+  welcome: "Welcome to IP Terminal! Type 'start' and let's go!",
   host: "IP.com",
   user: "hamster",
   is_root: false,
-  speed: 75
+  speed: 65
 };
 
 let i = 0;
@@ -18,8 +18,9 @@ class FakeTerminal extends React.Component {
        this.output = React.createRef();
        this.cmdline = React.createRef();
        this.prompt = React.createRef();
-       this.state = { text: '',
-                      prompt: ''
+       this.state = { output: '',
+                      prompt: '',
+                      cmdline: ''
                     };
    }
 
@@ -36,35 +37,48 @@ class FakeTerminal extends React.Component {
    typer(text) {
       if ( i < text.length ) {
           let char = text.charAt(i);
-          output += char;
-          this.setState({text: output});
+          let isNewLine = char === "\n";
+          output += isNewLine ? "\n" : char;
+          this.setState({output: output});
+          console.log(isNewLine);
           i++;
       } else {
          clearInterval(this.timerID);
-         this.unlock();
+         this.setState({output: output += "\n"});
+         i = 0;
+         this.userReady();
      }
    }
 
-   unlock = () => {
-         this.setState({ prompt: defaultOpts.user + "@" + defaultOpts.host + ":~" + (defaultOpts.root ? "#" : "$") })
-        //this.scrollToBottom();
+   userReady = () => {
+      this.cmdline.focus();
+      this.setState({ prompt: defaultOpts.user + "@" + defaultOpts.host + ":~" + (defaultOpts.root ? "#" : "$") });
+      // this.output.scrollIntoView({ behavior: 'smooth' });
     };
+
+    onFormSubmit = event => {
+    event.preventDefault();
+    this.handleTyping("Nice!");
+    this.setState({cmdline: ''})
+  };
 
    render(){
         return (
           <div className="column" id="terminal">
-              <div id="output" ref={this.output}>{this.state.text}</div>
-              <div id="input-line" className="input-line">
+              <div ref={output => {this.output = output}} id="output">{this.state.output}</div>
+              <form onSubmit={this.onFormSubmit} id="input-line" className="input-line">
                   <div id="prompt" className="prompt-color"
                        ref={this.prompt}> {this.state.prompt}
                   </div>&nbsp;
                   <div>
-                      <input type="text" id="cmdline" ref={this.cmdline}
+                      <input type="text" id="cmdline" ref={cmdline=>{this.cmdline = cmdline}}
+                      value = {this.state.cmdline}
+                      onChange={ e => this.setState({cmdline: e.target.value}) }
                       autoComplete="off"
                       autoCorrect="off" autoCapitalize="off"
                       spellCheck="false" autoFocus/>
                   </div>
-              </div>
+              </form>
           </div>
       );
     }
