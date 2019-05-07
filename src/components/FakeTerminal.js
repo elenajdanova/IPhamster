@@ -1,5 +1,6 @@
 import styles from './css/fakeTerminal.css';
 import React from 'react';
+import TermOutput from './TermOutput';
 
 let defaultOpts = {
   welcome: "Welcome to IP Terminal! Type 'start' and let's go!",
@@ -72,9 +73,7 @@ class FakeTerminal extends React.Component {
    render(){
         return (
           <div className="column" id="terminal">
-              <div ref={output => {this.output = output}} id="output">
-                   {this.state.output}
-              </div>
+              <TermOutput output = {this.state.output}/>
               <form onSubmit={this.onFormSubmit} id="input-line" className="input-line">
                   <div id="prompt" className="prompt-color">
                       {this.state.prompt}
