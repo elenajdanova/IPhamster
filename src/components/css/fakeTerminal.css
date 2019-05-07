@@ -20,6 +20,7 @@
 #output {
     clear: both;
     width: 100%;
+    white-space: pre;
 }
 #prompt {
     white-space: nowrap;

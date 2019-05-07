@@ -6,7 +6,7 @@ let defaultOpts = {
   host: "IP.com",
   user: "hamster",
   is_root: false,
-  speed: 65
+  speed: 45
 };
 
 let i = 0;
@@ -17,10 +17,10 @@ class FakeTerminal extends React.Component {
        super(props);
        this.output = React.createRef();
        this.cmdline = React.createRef();
-       this.prompt = React.createRef();
        this.state = { output: '',
                       prompt: '',
-                      cmdline: ''
+                      cmdline: '',
+                      outputPrmpt: ''
                     };
    }
 
@@ -37,10 +37,8 @@ class FakeTerminal extends React.Component {
    typer(text) {
       if ( i < text.length ) {
           let char = text.charAt(i);
-          let isNewLine = char === "\n";
-          output += isNewLine ? "\n" : char;
+          output += char;
           this.setState({output: output});
-          console.log(isNewLine);
           i++;
       } else {
          clearInterval(this.timerID);
@@ -51,24 +49,35 @@ class FakeTerminal extends React.Component {
    }
 
    userReady = () => {
-      this.cmdline.focus();
       this.setState({ prompt: defaultOpts.user + "@" + defaultOpts.host + ":~" + (defaultOpts.root ? "#" : "$") });
-      // this.output.scrollIntoView({ behavior: 'smooth' });
+      this.cmdline.focus();
+      //this.output.scrollIntoView({ behavior: 'smooth' });
     };
 
     onFormSubmit = event => {
-    event.preventDefault();
-    this.handleTyping("Nice!");
-    this.setState({cmdline: ''})
+        event.preventDefault();
+
+        this.handleTyping("Nice!");
+        const command = this.state.cmdline;
+        this.setState({cmdline: ''});
+
+        output += this.state.prompt + " " + command + "\n";
+        this.setState({prompt: ''});
+        this.setState({output: output})
+        this.userReady();
   };
+
+
 
    render(){
         return (
           <div className="column" id="terminal">
-              <div ref={output => {this.output = output}} id="output">{this.state.output}</div>
+              <div ref={output => {this.output = output}} id="output">
+                   {this.state.output}
+              </div>
               <form onSubmit={this.onFormSubmit} id="input-line" className="input-line">
-                  <div id="prompt" className="prompt-color"
-                       ref={this.prompt}> {this.state.prompt}
+                  <div id="prompt" className="prompt-color">
+                      {this.state.prompt}
                   </div>&nbsp;
                   <div>
                       <input type="text" id="cmdline" ref={cmdline=>{this.cmdline = cmdline}}
@@ -84,4 +93,4 @@ class FakeTerminal extends React.Component {
     }
 }
 
-  export default FakeTerminal;
+export default FakeTerminal;
