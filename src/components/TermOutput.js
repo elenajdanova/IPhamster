@@ -27,6 +27,9 @@ import React from 'react';
       this.timerID = setInterval(
         () => this.typer(text), defaultOpts.speed
       );
+      this.setState((state) => {
+        return {output: state.output + '\n'}
+      });
     }
 
     typer(text) {
@@ -40,9 +43,6 @@ import React from 'react';
         i++;
       } else {
         clearInterval(this.timerID);
-        this.setState((state) => {
-          return {output: state.output + "\n"}
-        });
         i = 0;
         this.props.onTyperEnd();
       }
@@ -50,7 +50,7 @@ import React from 'react';
 
     render() {
       return (
-        <div id="output"> {this.state.output} </div>
+        <div id="output">{this.state.output}</div>
       );
     }
   }

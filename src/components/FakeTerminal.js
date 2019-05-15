@@ -5,11 +5,9 @@ import TermInput from './TermInput';
 import Prompt from './Prompt';
 
 const defaultOpts = {
-  welcome: "Welcome to IP Terminal! Type 'start' and let's go!",
   host: "IP.com",
   user: "hamster",
-  is_root: false,
-  speed: 45
+  is_root: false
 };
 
 class FakeTerminal extends React.Component {
