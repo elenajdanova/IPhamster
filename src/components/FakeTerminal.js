@@ -15,13 +15,16 @@ const defaultOpts = {
 class FakeTerminal extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { question: true, result: '', prompt:'' };
+    this.state = { question: true, result: '', prompt:'', command: '', id: 0 };
   }
 
   onFormSubmit = (command) => {
     // decide what to do in engines
-    let output = 'Nice job!'
-    this.setState({result: output});
+    let output = 'Nice job!';
+    this.setState({result: output, command: command});
+    this.setState((state) => {
+      return {id: state.id + 1}
+    });
   }
 
   makeUserReady = () => {
@@ -34,6 +37,7 @@ class FakeTerminal extends React.Component {
         return (
           <div className="column" id="terminal">
               <TermOutput result = {this.state.result}
+                          id = {this.state.id}
                           onTyperEnd = {this.makeUserReady}
               />
               <Prompt prompt = {this.state.prompt}/>

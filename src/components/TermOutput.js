@@ -17,6 +17,11 @@ import React from 'react';
       this.handleTyping(defaultOpts.welcome);
     }
 
+    componentDidUpdate(prevProps){
+      if ( prevProps.id !== this.props.id ) {
+        this.handleTyping(this.props.result);
+      }
+    }
 
     handleTyping(text){
       this.timerID = setInterval(
@@ -35,20 +40,17 @@ import React from 'react';
         i++;
       } else {
         clearInterval(this.timerID);
+        this.setState((state) => {
+          return {output: state.output + "\n"}
+        });
         i = 0;
         this.props.onTyperEnd();
       }
     }
 
-    onCommandReceived = () => {
-      this.handleTyping(this.props.result);
-    }
-
     render() {
       return (
-        <div id="output">
-            {this.state.output}
-        </div>
+        <div id="output"> {this.state.output} </div>
       );
     }
   }
