@@ -1,5 +1,4 @@
 import React from 'react';
-//import TermHistory from './TermHistory';
 
   const defaultOpts = {
     welcome: "Welcome to IP Terminal! Type 'start' and let's go!",
@@ -10,36 +9,37 @@ import React from 'react';
   class TermOutput extends React.Component {
     constructor(props) {
       super(props);
-      this.state = { output: ''};
+      this.state = { welcome: '', history: []};
     }
 
     componentDidMount(){
-      this.handleTyping(defaultOpts.welcome);
+      this.handleTyping(defaultOpts.welcome, this.welcomeTyper);
     }
 
     componentDidUpdate(prevProps){
       if ( prevProps.id !== this.props.id ) {
-        this.handleTyping(this.props.result);
+          this.setState((state) => {
+              state.history.push({
+                  'prompt': this.props.curPrompt,
+                  'command': this.props.curCommand,
+                  'result': ''
+              })
+              return {history: state.history}
+          })
+        this.handleTyping(this.props.result, this.answerTyper);
       }
     }
 
-    handleTyping(text){
+    handleTyping = (text, callback) => {
       this.timerID = setInterval(
-        () => this.typer(text), defaultOpts.speed
+        () => this.typer(text, callback), defaultOpts.speed
       );
-      this.setState((state) => {
-        return {output: state.output + '\n'}
-      });
     }
 
-    typer(text) {
+    typer(text, callback) {
       if ( i < text.length ) {
         let char = text.charAt(i);
-
-        this.setState((state) => {
-          return {output: state.output + char}
-        });
-
+        callback(char);
         i++;
       } else {
         clearInterval(this.timerID);
@@ -48,16 +48,38 @@ import React from 'react';
       }
     }
 
+    welcomeTyper = (char) => {
+      this.setState((state) => {
+        return {welcome: state.welcome + char}
+      });
+    }
+
+    answerTyper = (char) => {
+      this.setState((state) => {
+        if (state.history.length > 0) {
+            state.history[state.history.length-1].result += char;
+        }
+          return {history: state.history}
+      });
+    }
+
     render() {
+      let historyOut = this.state.history.map((line) => {
+          return (
+            <div key={this.props.id}>
+              <span className="prompt-color">{line.prompt}&nbsp;</span>
+              <span>{line.command}</span>
+              <div>{line.result}</div>
+            </div>
+          )
+      });
       return (
-        <div id="output">{this.state.output}</div>
+        <div id="output">
+          {this.state.welcome}
+          {historyOut}
+        </div>
       );
     }
   }
-
-// <TermHistory
-//   currOutput = {this.state.output}
-//   writeHistory = {this.clearOutput}
-// />
 
 export default TermOutput;
