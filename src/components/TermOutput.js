@@ -64,9 +64,9 @@ import React from 'react';
     }
 
     render() {
-      let historyOut = this.state.history.map((line) => {
+      let historyOut = this.state.history.map((line, index) => {
           return (
-            <div key={this.props.id}>
+            <div key={index}>
               <span className="prompt-color">{line.prompt}&nbsp;</span>
               <span>{line.command}</span>
               <div>{line.result}</div>
