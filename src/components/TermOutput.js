@@ -28,6 +28,13 @@ import React from 'react';
           })
         this.handleTyping(this.props.result, this.answerTyper);
       }
+
+      if (this.props.id > 100 ) {
+          this.setState((state) => {
+              state.history.shift();
+              return {history: state.history}
+          })
+      }
     }
 
     handleTyping = (text, callback) => {
