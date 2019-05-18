@@ -24,9 +24,10 @@ class FakeTerminal extends React.Component {
 
   onFormSubmit = (command) => {
     // decide what to do in engines
-    let output = 'Nice job!' + this.state.id;
+    let output = 'Nice job!';
     this.setState({result: output, command: command});
     this.setState((state) => { return { id: state.id + 1 } });
+    this.childCmdline.cmdline.disabled = true;
   }
 
   makeUserReady = () => {
