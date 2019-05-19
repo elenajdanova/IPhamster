@@ -18,9 +18,7 @@
     border: none;
     color: inherit;
 }
-#output {
-    white-space: pre;
-}
+
 .inLine {
   display: inline !important;
 }

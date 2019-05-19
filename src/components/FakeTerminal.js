@@ -3,6 +3,7 @@ import React from 'react';
 import TermOutput from './TermOutput';
 import TermInput from './TermInput';
 import Prompt from './Prompt';
+import TerminalEngine from '../services/terminalEngine';
 
 const defaultOpts = {
   host: "IP.com",
@@ -23,8 +24,8 @@ class FakeTerminal extends React.Component {
   }
 
   onFormSubmit = (command) => {
-    // decide what to do in engines
-    let output = 'Nice job!';
+    let brain = new TerminalEngine(command);
+    let output = brain.result;
     this.setState({result: output, command: command});
     this.setState((state) => { return { id: state.id + 1 } });
     this.childCmdline.cmdline.disabled = true;
