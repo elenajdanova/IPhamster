@@ -1,14 +1,14 @@
 let cmds = {
     start: {value: 'start', help: 'help on start'},
     whoami: {value: 'whoami', help:'help on whoami'},
-    IPv4: {value: 'IPv4', help:'help on IPv4'},
-    IPv6: {value: 'IPv6', help:'help on IPv6'},
+    IPv4: {value: 'ipv4', help:'help on IPv4'},
+    IPv6: {value: 'ipv6', help:'help on IPv6'},
     both: {value: 'both', help:'help on both'}
 }
 
 export default class TerminalEngine {
     constructor (command) {
-        this.command = command;
+        this.command = command.toLowerCase();
         this.result = this.handleCMD();
     }
 
