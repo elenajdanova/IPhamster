@@ -15,17 +15,19 @@ class FakeTerminal extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-        question: true,
         result: '',
         prompt:'',
         command: '',
         id: 0
+        //gameON: false
     };
   }
 
   onFormSubmit = (command) => {
+    //this.gameMode(command);
     let brain = new TerminalEngine(command);
-    let output = brain.result;
+    let output = brain.getOutput();
+    //this.setState({gameON: brain.isGameON()})
     this.setState({result: output, command: command});
     this.setState((state) => { return { id: state.id + 1 } });
     this.childCmdline.cmdline.disabled = true;
@@ -36,6 +38,15 @@ class FakeTerminal extends React.Component {
     this.childCmdline.cmdline.disabled = false;
     this.childCmdline.cmdline.focus();
   }
+
+  // gameMode = async (cmd) => {
+  //   if (!this.state.gameON) {
+  //       let gameStarted = cmd === 'ipv4' || cmd === 'ipv6' || cmd === 'both';
+  //       if (gameStarted) {
+  //           await this.setState({ gameON: true }, () => {console.log(this.state.gameON);});
+  //       }
+  //   }
+  // }
 
    render(){
         return (

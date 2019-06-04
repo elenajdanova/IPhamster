@@ -13,7 +13,7 @@ class TermInput extends React.Component {
 
   onFormSubmit = event => {
     event.preventDefault();
-    this.props.afterUserSubmit(this.state.cmdline);
+    this.props.afterUserSubmit(this.state.cmdline.toLowerCase());
     this.setState({cmdline: ''});
   };
 
