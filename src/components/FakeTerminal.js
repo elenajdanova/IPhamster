@@ -26,7 +26,7 @@ class FakeTerminal extends React.Component {
   onFormSubmit = (command) => {
     //this.gameMode(command);
     let brain = new TerminalEngine(command);
-    let output = brain.getOutput();
+    let output = brain.output;
     //this.setState({gameON: brain.isGameON()})
     this.setState({result: output, command: command});
     this.setState((state) => { return { id: state.id + 1 } });
