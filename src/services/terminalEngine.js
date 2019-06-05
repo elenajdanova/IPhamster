@@ -46,22 +46,23 @@ export default class TerminalEngine {
     }
 
     generateQuestion (v) {
-        let addr = this.generateIPv4();
-        let prefix = this.getRandomInt(1,32);
+        let addr = this.generateIPv4() + ' / ' + this.generatePrefix(v);
+        let prefix = this.generatePrefix(v);
+        let address = this.generateIPv4();
         let questionBase = [
             `Assign first address from network ${addr} to eth0`,
             `Assign last address from network ${addr} to eth2`,
             `Assign second address from network ${addr} to eth1`,
-            `Assign ${address} to eth0 using short mask notation`,
-            `Assign ${prefix} to eth0 using mask long notation`,
+            `Assign this mask ${address} to eth0 using short mask notation`,
+            `Assign ${prefix} to eth0 using long mask notation`,
             `You know that ${address} is on ${prefix} network. Add a route to that network via ${address} (doesnt matter/network)`
         ];
+        return questionBase[this.getRandomInt( 0, (questionBase.length - 1) )];
     }
 
     generateIPv4 () {
         let iter = 4;
         let octs = [];
-        let prefix = 0;
         let address = '';
 
         while (iter > 0) {
@@ -69,15 +70,16 @@ export default class TerminalEngine {
             iter--;
         }
         address = octs.join('.');
-        prefix = this.getRandomInt(1,32);
-        return address + ' / ' + prefix;
+        return address;
     }
 
+    generatePrefix (v) {
+        return v === 4 ? this.getRandomInt(1,32) : this.getRandomInt(1,128);
+    }
 
     generateIPv6 () {
       let iter = 8;
       let hexes = [];
-      let prefix = 0;
       let address = '';
 
       while (iter > 0) {
@@ -85,8 +87,7 @@ export default class TerminalEngine {
           iter--;
       }
       address = hexes.join(':');
-      prefix = this.getRandomInt(1,128);
-      return address + ' / ' + prefix;
+      return address;
     }
 
     getRandomInt (min, max) {
