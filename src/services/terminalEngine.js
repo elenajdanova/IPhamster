@@ -35,7 +35,7 @@ export default class TerminalEngine {
             case cmds.IPv4.value:
                 return this.generateQuestion(4);
             case cmds.IPv6.value:
-                return this.generateIPv6();
+                return this.generateQuestion(6);
             default:
                 return this.invalidCMD();
         }
@@ -46,48 +46,39 @@ export default class TerminalEngine {
     }
 
     generateQuestion (v) {
-        let addr = this.generateIPv4() + ' / ' + this.generatePrefix(v);
         let prefix = this.generatePrefix(v);
-        let address = this.generateIPv4();
+        let address = this.generateIP(v);
+        let addr = address + ' / ' + prefix;
         let questionBase = [
             `Assign first address from network ${addr} to eth0`,
             `Assign last address from network ${addr} to eth2`,
             `Assign second address from network ${addr} to eth1`,
-            `Assign this mask ${address} to eth0 using short mask notation`,
+            `Assign this IP ${address} / {longMask} to eth0 using short mask notation`,
             `Assign ${prefix} to eth0 using long mask notation`,
-            `You know that ${address} is on ${prefix} network. Add a route to that network via ${address} (doesnt matter/network)`
+            `You know that ${address} is on ${prefix} network. Add a route to that network via ${address} (dnt m/network)`
         ];
         return questionBase[this.getRandomInt( 0, (questionBase.length - 1) )];
     }
 
-    generateIPv4 () {
-        let iter = 4;
-        let octs = [];
+    generateIP (v) {
+        let marks =  {
+            4: [4, '.'],
+            6: [8, ':']
+        };
+        let chunks = [];
         let address = '';
 
-        while (iter > 0) {
-            octs.push(this.getRandomInt(0,255));
-            iter--;
+        while (marks[v][0] > 0) {
+            v === 4 ? chunks.push(this.getRandomInt(0, 255)) :
+                      chunks.push(this.getRandomInt(0, 65535).toString(16));
+            marks[v][0] --;
         }
-        address = octs.join('.');
+        address = chunks.join(marks[v][1]);
         return address;
     }
 
     generatePrefix (v) {
         return v === 4 ? this.getRandomInt(1,32) : this.getRandomInt(1,128);
-    }
-
-    generateIPv6 () {
-      let iter = 8;
-      let hexes = [];
-      let address = '';
-
-      while (iter > 0) {
-          hexes.push(this.getRandomInt(0,65535).toString(16));
-          iter--;
-      }
-      address = hexes.join(':');
-      return address;
     }
 
     getRandomInt (min, max) {
