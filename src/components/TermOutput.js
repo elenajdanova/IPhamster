@@ -1,7 +1,7 @@
 import React from 'react';
 
   const defaultOpts = {
-    welcome: "Welcome to IP Terminal! Type 'start' and let's go!",
+    welcome: "Welcome to IP Terminal! Type 'ipv4' or 'ipv6' to start! Type 'exit' when you want to stop.",
     speed: 45
   };
   let i = 0;

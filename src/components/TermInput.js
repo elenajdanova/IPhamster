@@ -15,6 +15,7 @@ class TermInput extends React.Component {
     event.preventDefault();
     this.props.afterUserSubmit(this.state.cmdline.toLowerCase());
     this.setState({cmdline: ''});
+    // TODO: validate input length up to 255 symbols
   };
 
   render() {
