@@ -3,13 +3,15 @@ import React from 'react';
 import TermOutput from './TermOutput';
 import TermInput from './TermInput';
 import Prompt from './Prompt';
-import TerminalEngine from '../services/terminalEngine';
+import GameEngine from '../services/gameEngine';
 
 const defaultOpts = {
   host: "IP.com",
   user: "hamster",
   is_root: false
 };
+
+let ge = new GameEngine();
 
 class FakeTerminal extends React.Component {
   constructor(props) {
@@ -19,15 +21,11 @@ class FakeTerminal extends React.Component {
         prompt:'',
         command: '',
         id: 0
-        //gameON: false
     };
   }
 
   onFormSubmit = (command) => {
-    //this.gameMode(command);
-    let brain = new TerminalEngine(command);
-    let output = brain.output;
-    //this.setState({gameON: brain.isGameON()})
+    let output = ge.handleCommand(command);
     this.setState({result: output, command: command});
     this.setState((state) => { return { id: state.id + 1 } });
     this.childCmdline.cmdline.disabled = true;
@@ -38,15 +36,6 @@ class FakeTerminal extends React.Component {
     this.childCmdline.cmdline.disabled = false;
     this.childCmdline.cmdline.focus();
   }
-
-  // gameMode = async (cmd) => {
-  //   if (!this.state.gameON) {
-  //       let gameStarted = cmd === 'ipv4' || cmd === 'ipv6' || cmd === 'both';
-  //       if (gameStarted) {
-  //           await this.setState({ gameON: true }, () => {console.log(this.state.gameON);});
-  //       }
-  //   }
-  // }
 
    render(){
         return (

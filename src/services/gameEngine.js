@@ -1,19 +1,3 @@
-// export default class TerminalEngine {
-//     constructor (command, gameON) {
-//         this.terminal = gameON ? new GameTerminal() : new ClassicTerminal();
-//         this.terminal.handleCommand(command, gameON);
-//     }
-//
-//       getOutput () {
-//         return this.terminal.getOutput();
-//       }
-//
-//       isGameON () {
-//         return this.terminal.isGameON();
-//       }
-//   }
-
-
 let cmds = {
     start: {value: 'start', help: 'help on start'},
     whoami: {value: 'whoami', help:'help on whoami'},
@@ -22,14 +6,16 @@ let cmds = {
     both: {value: 'both', help:'help on both'}
 }
 
-export default class TerminalEngine {
-    constructor (command) {
-        this.command = command;
-        this.output = this.handleCommand();
+export default class GameEngine {
+    constructor () {
+        this.isPlaying = false;
+        this.qAsked = 0;
+        this.qAnswered = 0;
+        this.qAnsweredCorrectly = 0;
     }
 
-    handleCommand () {
-        switch (this.command) {
+    handleCommand (command) {
+        switch (command) {
             case cmds.start.value:
                 return this.start();
             case cmds.IPv4.value:
@@ -42,7 +28,7 @@ export default class TerminalEngine {
     }
 
     start () {
-        return ('What IP version do you want to master? Type "IPv4", "IPv6" or "both" if you want to make it really hard! ;)');
+        return ('What IP version do you want to master? Type "IPv4" or "IPv6" to start the game ;)');
     }
 
     generateQuestion (v) {
