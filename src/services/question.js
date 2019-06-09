@@ -9,8 +9,20 @@ import Network from './ip_calculator/src/network.js';
 //     `You know that ${address} is on ${prefix} network. Add a route to that network via ${address} (dnt m/network)`
 // ];
 
+
+/**
+* Represents part of the game engine, that is responsible for generating questions and get answers for them
+* @class Question
+* @return {object} with all methods
+*/
 export default class Question {
 
+  /**
+   * generate - generate question and answer
+   *
+   * @param  {number} v IP version
+   * @return {array}
+   */
   generate (v) {
       let prefix = this.generatePrefix(v);
       let address = this.generateIP(v);
@@ -24,6 +36,12 @@ export default class Question {
       return [questionBase.first, answer];
   }
 
+  /**
+   * generateIP - generate random IP address
+   *
+   * @param  {number} v version
+   * @return {string}   address
+   */
   generateIP (v) {
       let marks =  {
           4: [4, '.'],
@@ -41,10 +59,23 @@ export default class Question {
       return address;
   }
 
+  /**
+   * generatePrefix - generate random prefix
+   *
+   * @param  {number} v version
+   * @return {number}   prefix
+   */
   generatePrefix (v) {
       return v === 4 ? this.getRandomInt(1,32) : this.getRandomInt(1,128);
   }
 
+  /**
+   * getRandomInt - generate random integer
+   *
+   * @param  {number} min from inclusive
+   * @param  {number} max to inclusive
+   * @return {number}
+   */
   getRandomInt (min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
   }

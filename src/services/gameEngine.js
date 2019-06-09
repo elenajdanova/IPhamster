@@ -10,6 +10,12 @@ let cmds = {
     help: {value: 'help', help:'help !!!'}
 }
 
+/**
+* Represents engine of the whole game. Onlu this class is linked with React components
+* @class GameEngine
+* @return {object} with all methods
+*/
+
 export default class GameEngine {
     constructor () {
         this.isPlaying = false;
@@ -19,6 +25,13 @@ export default class GameEngine {
         this.curVersion = 0;
     }
 
+
+    /**
+     * handleCommand - handles user's input
+     *
+     * @param  {string} command takes user's command
+     * @return {string}         and returns reaction to it
+     */
     handleCommand (command) {
         if (this.isPlaying) {
             switch (command) {
@@ -46,16 +59,29 @@ export default class GameEngine {
         }
     }
 
+
+    /**
+     * stop - stops game mode
+     *
+     * @return {string}  with stats og the last game
+     */
     stop () {
         let asked = this.qAsked - 1;
         let answered = this.qAnsweredCorrectly;
-        
+
         this.isPlaying = false;
         this.qAsked = 0;
         this.qAnsweredCorrectly = 0;
         return 'Thats it! Youve been asked ' + asked + ' questions. Correct were ' + answered;
     }
 
+
+    /**
+     * nextQuestion - asks next question and answer to it and handles class props
+     *
+     * @param  {number} v version
+     * @return {string}   generated questuin
+     */
     nextQuestion (v) {
         this.isPlaying = true;
         this.qAsked++;
@@ -66,6 +92,12 @@ export default class GameEngine {
         return q;
     }
 
+
+    /**
+     * invalidCMD - returns error message if inapropriate command was entered by user
+     *
+     * @return {string}  error msg
+     */
     invalidCMD () {
         return 'Command not found';
     }
