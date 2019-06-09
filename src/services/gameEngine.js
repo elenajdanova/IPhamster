@@ -14,7 +14,6 @@ export default class GameEngine {
     constructor () {
         this.isPlaying = false;
         this.qAsked = 0;
-        this.qAnswered = 0;
         this.qAnsweredCorrectly = 0;
         this.curAnswer = '';
         this.curVersion = 0;
@@ -25,8 +24,13 @@ export default class GameEngine {
             switch (command) {
                 case cmds.exit.value:
                     return this.stop();
+                case this.curAnswer:
+                    this.qAnsweredCorrectly++;
+                    return 'WoW! Good hooman! Next one: ' + this.nextQuestion(this.curVersion);
+                case cmds.help.value:
+                    return cmds.help.help;
                 default:
-                    return this.invalidCMD();
+                    return 'Owh, thats wrong! Try this: ' + this.nextQuestion(this.curVersion);
             }
         } else {
             switch (command) {
@@ -43,15 +47,22 @@ export default class GameEngine {
     }
 
     stop () {
+        let asked = this.qAsked - 1;
+        let answered = this.qAnsweredCorrectly;
+        
         this.isPlaying = false;
+        this.qAsked = 0;
+        this.qAnsweredCorrectly = 0;
+        return 'Thats it! Youve been asked ' + asked + ' questions. Correct were ' + answered;
     }
 
     nextQuestion (v) {
         this.isPlaying = true;
+        this.qAsked++;
         this.curVersion = v;
         let [q, a] = question.generate(this.curVersion);
         this.curAnswer = a;
-        console.log(this.curAnswer);
+        console.log('answ ' + this.curAnswer);
         return q;
     }
 
