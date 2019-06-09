@@ -1,0 +1,4 @@
+[submodule "src/services/ip_calculator"]
+	path = src/services/ip_calculator
+	url = https://github.com/elenajdanova/ip_calculator.git
+	branch = master

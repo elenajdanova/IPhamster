@@ -51,6 +51,7 @@ export default class GameEngine {
         this.curVersion = v;
         let [q, a] = question.generate(this.curVersion);
         this.curAnswer = a;
+        console.log(this.curAnswer);
         return q;
     }
 

@@ -1,18 +1,27 @@
+import Network from './ip_calculator/src/network.js';
+
+// let questionBase = [
+//     `Assign first address from network ${addr} to eth0`,
+//     `Assign last address from network ${addr} to eth2`,
+//     `Assign second address from network ${addr} to eth1`,
+//     `Assign this IP ${address} / {longMask} to eth0 using short mask notation`,
+//     `Assign ${prefix} to eth0 using long mask notation`,
+//     `You know that ${address} is on ${prefix} network. Add a route to that network via ${address} (dnt m/network)`
+// ];
+
 export default class Question {
 
   generate (v) {
       let prefix = this.generatePrefix(v);
       let address = this.generateIP(v);
       let addr = address + ' / ' + prefix;
-      let questionBase = [
-          `Assign first address from network ${addr} to eth0`,
-          `Assign last address from network ${addr} to eth2`,
-          `Assign second address from network ${addr} to eth1`,
-          `Assign this IP ${address} / {longMask} to eth0 using short mask notation`,
-          `Assign ${prefix} to eth0 using long mask notation`,
-          `You know that ${address} is on ${prefix} network. Add a route to that network via ${address} (dnt m/network)`
-      ];
-      return questionBase[this.getRandomInt( 0, (questionBase.length - 1) )];
+      let questionBase = {
+          'first' : `Assign first address from network ${addr} to eth0`
+      };
+
+      let net = new Network(address, prefix);
+      let answer = net.hostFirst();
+      return [questionBase.first, answer];
   }
 
   generateIP (v) {
@@ -39,5 +48,5 @@ export default class Question {
   getRandomInt (min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
   }
-  
+
 }
