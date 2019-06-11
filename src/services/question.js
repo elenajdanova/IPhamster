@@ -30,8 +30,8 @@ export default class Question {
           5 : `You know that ${address} is on ${prefix} network. Add a route to that network via ${address2} (dnt m/network)`
       };
       let qKeys = Object.keys(questionBase);
-      //let getRandomQ = this.getRandomInt(0, qKeys.length-1);
-      let getRandomQ = 3;
+      let getRandomQ = this.getRandomInt(0, qKeys.length-1);
+      //let getRandomQ = 3;
       let question = questionBase[getRandomQ];
       let answer;
 
@@ -49,7 +49,7 @@ export default class Question {
               console.log(getRandomQ, answer);
               break;
           case 3 :
-              answer = prefix;
+              answer = prefix.toString();
               console.log(getRandomQ, answer);
               break;
           case 4 :
