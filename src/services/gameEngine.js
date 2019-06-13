@@ -21,7 +21,7 @@ export default class GameEngine {
         this.isPlaying = false;
         this.qAsked = 0;
         this.qAnsweredCorrectly = 0;
-        this.curAnswer = '';
+        this.curAnswer = [];
         this.curVersion = 0;
     }
 
@@ -37,7 +37,9 @@ export default class GameEngine {
             switch (command) {
                 case cmds.exit.value:
                     return this.stop();
-                case this.curAnswer:
+                case this.curAnswer[0]:
+                    // fall through
+                case this.curAnswer[1]:
                     this.qAnsweredCorrectly++;
                     return 'WoW! Good hooman! Next one: ' + this.nextQuestion(this.curVersion);
                 case cmds.help.value:

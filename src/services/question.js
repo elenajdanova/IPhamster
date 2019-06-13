@@ -1,5 +1,6 @@
 /* global BigInt */
 import Network from './ip_calculator/src/network.js';
+import IP from './ip_calculator/src/ip.js';
 
 /**
 * Represents part of the game engine, that is responsible for generating questions and get answers for them
@@ -17,6 +18,7 @@ export default class Question {
   generate (v) {
       let prefix = this.generatePrefix(v);
       let address = this.generateIP(v);
+      //let address = '7223:00c5::ffff:ffff:ffff';
       let address2 = this.generateIP(v);
       let fullAddr = address + ' / ' + prefix;
       let net = new Network(address, prefix);
@@ -29,42 +31,57 @@ export default class Question {
           4 : `Assign ${prefix} to eth0 using long mask notation`,
           5 : `You know that ${address} is on ${prefix} network. Add a route to that network via ${address2} (dnt m/network)`
       };
-      let qKeys = Object.keys(questionBase);
-      let getRandomQ = this.getRandomInt(0, qKeys.length-1);
+      let getRandomQ = this.getRandomInt(0, Object.keys(questionBase).length-1);
       //let getRandomQ = 3;
       let question = questionBase[getRandomQ];
-      let answer;
+      let answer = '';
+      let possAnswers = [];
 
       switch (getRandomQ) {
           case 0 :
               answer = net.hostLast();
-              console.log(getRandomQ, answer);
+              possAnswers = this.getAllAnsTypes(answer, v);
+              console.log(getRandomQ, possAnswers);
               break;
           case 1 :
               answer = net.hostFirst();
-              console.log(getRandomQ, answer);
+              possAnswers = this.getAllAnsTypes(answer, v);
+              console.log(getRandomQ, possAnswers);
               break;
           case 2 :
               answer = net.toDottedNotation(net.networkToInteger() + BigInt(2));
-              console.log(getRandomQ, answer);
+              possAnswers = this.getAllAnsTypes(answer, v);
+              console.log(getRandomQ, possAnswers);
               break;
           case 3 :
               answer = prefix.toString();
-              console.log(getRandomQ, answer);
+              possAnswers.push(answer);
+              possAnswers.push(answer); //Do I need it twice?
+              console.log(getRandomQ, possAnswers);
               break;
           case 4 :
               answer = longmask;
-              console.log(getRandomQ, answer);
+              possAnswers = this.getAllAnsTypes(answer, v);
+              console.log(getRandomQ, possAnswers);
               break;
           case 5 :
               answer = net.getNetwork();
-              console.log(getRandomQ, answer);
+              possAnswers = this.getAllAnsTypes(answer, v);
+              console.log(getRandomQ, possAnswers);
               break;
           default:
               answer = 'oops! we have a problem. Answer is undefined';
+              console.log(answer);
       }
+      return [question, possAnswers];
+  }
 
-      return [question, answer];
+  getAllAnsTypes (answer, v) {
+      let answers = [];
+      let alterA = new IP(answer);
+      answers.push(alterA.toCompressed(answer, v));
+      answers.push(alterA.address);
+      return answers;
   }
 
   /**
